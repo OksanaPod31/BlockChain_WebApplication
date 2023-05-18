@@ -1,0 +1,52 @@
+﻿@page "/"
+@using BlockchainApp.Web.Shared
+@using Grpc.Core;
+
+@inject Greeter.GreeterClient greeterClient
+
+<style>
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+</style>
+   
+
+
+<div style="height: 80vh; overflow-y: scroll; scrollbar-width: none">
+    @if(_messages == null)
+    {
+        <h4>Загрузка...</h4>
+    }
+    else
+    {
+        foreach(var message in _messages)
+        {
+            <h2>@message</h2>
+        }
+    }
+</div>
+<div style="display:flex; flex-direction: row; gap: 40px; justify-content: space-around; align-items: baseline">
+    <RadzenTextArea Placeholder="Enter here..." class="w-100" />
+    @*<RadzenButton>Отправить</RadzenButton>*@
+    <RadzenButton Icon="add" ButtonStyle="ButtonStyle.Primary"  Size="ButtonSize.Large" class="rz-border-radius-10 rz-shadow-10" />
+
+</div>
+
+
+@code{
+    private List<string> _messages = new List<string>();
+    protected override async Task OnInitializedAsync()
+    {
+        using var serverStream = greeterClient.JoinChat(new HelloRequest());
+
+        var stream = serverStream.ResponseStream;
+        await foreach(var message in stream.ReadAllAsync())
+        {
+            _messages.Add(message.Message);
+            this.StateHasChanged();
+        }
+
+       
+    }
+
+}
