@@ -10,6 +10,7 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);
 
   rpc JoinChat(HelloRequest) returns (stream HelloReply);
+  rpc Send(HelloReply) returns (AnsRequest);
 }
 
 // The request message containing the user's name.
@@ -20,4 +21,7 @@ message HelloRequest {
 // The response message containing the greetings.
 message HelloReply {
   string message = 1;
+}
+message AnsRequest{
+	
 }

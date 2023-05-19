@@ -9,22 +9,23 @@ namespace BlockchainApp.Domain.BlockchainModels
 {
     public class Transaction
     {
+        public int TransactionId { get; set; }
         public long TimeStamp { get; set; }
         public string Sender { set; get; }
         public string Recipient { set; get; }
         public string DataContent { set; get; }
 
-        public Transaction(long timeStamp, string sender, string recipient, string dataContent)
-        {
-            TimeStamp = timeStamp;
-            Sender = sender;
-            Recipient = recipient;
-            DataContent = EDS.EncryptWithKey(dataContent);
-        }
+        //public Transaction(long timeStamp, string sender, string recipient, string dataContent)
+        //{
+        //    TimeStamp = timeStamp;
+        //    Sender = sender;
+        //    Recipient = recipient;
+        //    DataContent = dataContent;
+        //}
 
-        public string GetContetnt()
-        {
-            return EDS.DecryptWithKey(DataContent);
-        }
+        //public string GetContetnt()
+        //{
+        //    return EDS.DecryptWithKey(DataContent);
+        //}
     }
 }

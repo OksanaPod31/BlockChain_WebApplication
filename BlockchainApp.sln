@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockchainApp.Web.Client", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockchainApp.Web.Shared", "BlockchainApp.Web\Shared\BlockchainApp.Web.Shared.csproj", "{845CB246-CB80-4A12-9331-13C492D02BD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockchainApp.Persistence", "BlockchainApp.Persistence\BlockchainApp.Persistence.csproj", "{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{845CB246-CB80-4A12-9331-13C492D02BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{845CB246-CB80-4A12-9331-13C492D02BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{845CB246-CB80-4A12-9331-13C492D02BD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{E91E1F94-C51A-43AD-937F-16EF8335856A} = {8B60D0B0-69BE-411A-A93F-EBC394530356}
 		{7EDA1AF7-8AF8-44BA-9FA1-D3A03182F9BE} = {8B60D0B0-69BE-411A-A93F-EBC394530356}
 		{845CB246-CB80-4A12-9331-13C492D02BD4} = {8B60D0B0-69BE-411A-A93F-EBC394530356}
+		{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12} = {64AB2A4B-C89C-41FE-A499-8D7FA93FED91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3FAD810-76D4-46A8-B5F4-D5E805853F7A}

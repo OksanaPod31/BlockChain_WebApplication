@@ -10,9 +10,11 @@
     <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
     <PackageReference Include="Grpc.AspNetCore.Web" Version="2.53.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BlockchainApp.Persistence\BlockchainApp.Persistence.csproj" />
     <ProjectReference Include="..\Client\BlockchainApp.Web.Client.csproj" />
     <ProjectReference Include="..\Shared\BlockchainApp.Web.Shared.csproj" />
   </ItemGroup>

@@ -1,5 +1,7 @@
+using BlockchainApp.Persistence;
 using BlockchainApp.Web.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<BlockchainDbContext>(options => options.UseSqlite(@"Data Source=Blockchain.db"), ServiceLifetime.Singleton);
+builder.Services.AddSingleton<ChatRoomManager>();
+
+//builder.Services.AddScoped<IBlockchainDbContext, BlockchainDbContext>();
+//builder.Services.AddScoped<IBlockchainDbContext>(provider => provider.GetService<BlockchainDbContext>);
 
 var app = builder.Build();
 
@@ -41,6 +48,7 @@ app.UseEndpoints(endpoints =>
 {
 	// map to and register the gRPC service
 	endpoints.MapGrpcService<GreeterService>().EnableGrpcWeb();
+	endpoints.MapGrpcService<ChatRoomService>().EnableGrpcWeb();
 	endpoints.MapRazorPages();
 	endpoints.MapControllers();
 	endpoints.MapFallbackToFile("index.html");

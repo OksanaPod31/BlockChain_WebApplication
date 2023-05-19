@@ -20,7 +20,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BlockchainApp.Domain\BlockchainApp.Domain.csproj" />
+    <ProjectReference Include="..\..\BlockchainApp.Persistence\BlockchainApp.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="greet.proto" />
+  </ItemGroup>
+	<ItemGroup>
+    <Protobuf Include="chatroom.proto" />
   </ItemGroup>
 
   <ItemGroup>
