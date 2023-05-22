@@ -14,14 +14,16 @@ namespace BlockchainApp.Domain.BlockchainModels
         public string Sender { set; get; }
         public string Recipient { set; get; }
         public string DataContent { set; get; }
+        public List<Block> Blocks { set; get; }
 
-        //public Transaction(long timeStamp, string sender, string recipient, string dataContent)
-        //{
-        //    TimeStamp = timeStamp;
-        //    Sender = sender;
-        //    Recipient = recipient;
-        //    DataContent = dataContent;
-        //}
+        public Transaction(long timeStamp, string sender, string recipient, string dataContent)
+        {
+            TimeStamp = timeStamp;
+            Sender = sender;
+            Recipient = recipient;
+            DataContent = dataContent;
+        }
+        public Transaction() { }
 
         //public string GetContetnt()
         //{

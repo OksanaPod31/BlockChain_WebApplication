@@ -2,6 +2,11 @@ using BlockchainApp.Persistence;
 using BlockchainApp.Web.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Quartz;
+
+using BlockchainApp.Web.Server;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using System.ComponentModel.DataAnnotations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +19,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<BlockchainDbContext>(options => options.UseSqlite(@"Data Source=Blockchain.db"), ServiceLifetime.Singleton);
 builder.Services.AddSingleton<ChatRoomManager>();
+//builder.Services.AddQuartz();
+
+
 
 //builder.Services.AddScoped<IBlockchainDbContext, BlockchainDbContext>();
 //builder.Services.AddScoped<IBlockchainDbContext>(provider => provider.GetService<BlockchainDbContext>);
@@ -32,7 +40,9 @@ else
 	app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
+
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
@@ -54,4 +64,10 @@ app.UseEndpoints(endpoints =>
 	endpoints.MapFallbackToFile("index.html");
 });
 
+//var provider = builder.Appli
+//	UseScheduler(scheduler =>
+//{
+//	scheduler.Schedule<BlockJob>().EveryThirtySeconds();
+//});
 app.Run();
+

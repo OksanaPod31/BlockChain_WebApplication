@@ -14,13 +14,13 @@ namespace BlockchainApp.Domain.Common.Utils
             return System.Text.Encoding.UTF8.GetBytes(arg);
         }
 
-        public static byte[] ConvertToByte(this Transaction[] lsTrx)
+        public static byte[] ConvertToByte(this List<Transaction> lsTrx)
         {
             var transactionsString = Newtonsoft.Json.JsonConvert.SerializeObject(lsTrx);
             return transactionsString.ConvertToBytes();
         }
 
-        public static string ConvertToString(this Transaction[] lsTrx)
+        public static string ConvertToString(this List<Transaction> lsTrx)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(lsTrx);
         }

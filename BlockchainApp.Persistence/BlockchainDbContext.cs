@@ -23,16 +23,16 @@ namespace BlockchainApp.Persistence
         {
             modelBuilder.Entity<Block>(builder =>
             {
-                var tr1 = new Transaction { TransactionId = 1, DataContent = "", Recipient = "All", Sender = "GenesisBlock", TimeStamp = DateTime.Now.Ticks };
-                var tr = new Transaction[] { tr1 };
+                //var tr1 = new Transaction { TransactionId = 1, DataContent = "Привет от генезис блока", Recipient = "All", Sender = "GenesisBlock", TimeStamp = DateTime.Now.Ticks };
+                //var tr = new List<Transaction> { tr1 };
                 var bl = new Block
                 {
                     Height = 1,
                     TimeStamp = DateTime.Now.Ticks,
                     PrevHash = string.Empty.ConvertToBytes(),
                     Creator = "Admin",
-                    Transactions = tr,
-                    TransactionsId = 1
+                    //Transactions = tr,
+                    
 
                 };
                 bl.Hash = bl.GenerateHash();

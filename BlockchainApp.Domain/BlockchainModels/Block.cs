@@ -18,23 +18,19 @@ namespace BlockchainApp.Domain.BlockchainModels
         public Int64 TimeStamp { get; set; }
         public byte[] PrevHash { get; set; }
         public byte[] Hash { get; set; }
-
-        [ForeignKey(nameof(Transaction))]
-        public int TransactionsId { get; set; }
-        public Transaction Transaction { get; set; }
         public string Creator { get; set; }
-        [NotMapped]
-        public Transaction[] Transactions { get; set; }
+        public List<Transaction> Transactions { get; set; }
 
-        //public Block(int height, byte[] prevHash, Transaction[] transactions, string creator)
-        //{
-        //    Height = height;
-        //    PrevHash = prevHash;
-        //    TimeStamp = DateTime.Now.Ticks;
-        //    Transactions = transactions;
-        //    Hash = GenerateHash();
-        //    Creator = creator;
-        //}
+        public Block() { }
+        public Block(int height, byte[] prevHash, List<Transaction> transactions, string creator)
+        {
+            Height = height;
+            PrevHash = prevHash;
+            TimeStamp = DateTime.Now.Ticks;
+            Transactions = transactions;
+            Hash = GenerateHash();
+            Creator = creator;
+        }
 
         public byte[] GenerateHash()
         {
