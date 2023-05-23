@@ -23,19 +23,8 @@ namespace BlockchainApp.Persistence
         {
             modelBuilder.Entity<Block>(builder =>
             {
-                //var tr1 = new Transaction { TransactionId = 1, DataContent = "Привет от генезис блока", Recipient = "All", Sender = "GenesisBlock", TimeStamp = DateTime.Now.Ticks };
-                //var tr = new List<Transaction> { tr1 };
-                var bl = new Block
-                {
-                    Height = 1,
-                    TimeStamp = DateTime.Now.Ticks,
-                    PrevHash = string.Empty.ConvertToBytes(),
-                    Creator = "Admin",
-                    //Transactions = tr,
-                    
-
-                };
-                bl.Hash = bl.GenerateHash();
+                
+                var bl = Block.Genesis("-");
                 builder.HasKey(x => x.Height);
                 builder.Property(x => x.Height).ValueGeneratedOnAdd();
                 builder.HasData(bl);
@@ -49,7 +38,7 @@ namespace BlockchainApp.Persistence
                     DataContent = "", 
                     Recipient = "All", 
                     Sender = "GenesisBlock", 
-                    TimeStamp = DateTime.Now.Ticks 
+                    TimeStamp = DateTime.Now
                 });
             });
         }

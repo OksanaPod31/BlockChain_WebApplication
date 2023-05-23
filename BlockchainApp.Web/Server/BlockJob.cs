@@ -1,17 +1,30 @@
-﻿using System;
+﻿using BlockchainApp.Persistence;
+using BlockchainApp.Web.Shared;
+using Quartz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlockchainApp.Web.Shared
+namespace BlockchainApp.Web.Server
 {
-    public class BlockJob : IInvocable
+    public class BlockJob : IJob
     {
-        public Task Invoke()
+        private readonly BlockchainDbContext _db;
+
+        public BlockJob(BlockchainDbContext db)
         {
-            Blockchain.BuildNewBlock();
-            return Task.CompletedTask;
+            _db = db;
         }
+
+        public async Task Execute(IJobExecutionContext context)
+        {
+            await Blockchain.BuildNewBlock(_db);
+            //return Task.CompletedTask;
+            await Task.Delay(5000);
+        }
+
+        
     }
 }

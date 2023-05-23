@@ -19,7 +19,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<BlockchainDbContext>(options => options.UseSqlite(@"Data Source=Blockchain.db"), ServiceLifetime.Singleton);
 builder.Services.AddSingleton<ChatRoomManager>();
-//builder.Services.AddQuartz();
+builder.Services.AddQuartz(Quartz =>
+{
+	Quartz.UseMicrosoftDependencyInjectionJobFactory();
+	var blockchainJobKey = new JobKey("BlockJob");
+	Quartz.AddJob<BlockJob>(opt => opt.WithIdentity(blockchainJobKey));
+	Quartz.AddTrigger(opt => opt.ForJob(blockchainJobKey).WithIdentity("BlockJob-trigger")
+	.WithSimpleSchedule(x => x.WithIntervalInSeconds(30).RepeatForever()));
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 
 
