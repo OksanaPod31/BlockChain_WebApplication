@@ -29,7 +29,7 @@
         var state = await authenticationState;
         
         
-        if (state.User.Identity is null)
+        if (!state.User.Identity.IsAuthenticated)
         {
             Nav.NavigateTo("login");
         }
