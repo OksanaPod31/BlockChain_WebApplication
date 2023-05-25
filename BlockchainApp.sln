@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockchainApp.Web.Client", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockchainApp.Web.Shared", "BlockchainApp.Web\Shared\BlockchainApp.Web.Shared.csproj", "{845CB246-CB80-4A12-9331-13C492D02BD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockchainApp.Persistence", "BlockchainApp.Persistence\BlockchainApp.Persistence.csproj", "{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockchainApp.Persistence", "BlockchainApp.Persistence\BlockchainApp.Persistence.csproj", "{F293E8B3-0BF2-4FF7-BF7F-3497B5487E12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

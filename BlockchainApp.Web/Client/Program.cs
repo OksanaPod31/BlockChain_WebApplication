@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using BlockchainApp.Web.Shared;
+using Microsoft.AspNetCore.Components.Authorization;
+using Blazored.LocalStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,5 +21,10 @@ builder.Services.AddSingleton(services =>
 	var channel = GrpcChannel.ForAddress(baseUri, new GrpcChannelOptions { HttpClient = httpClient });
 	return new Greeter.GreeterClient(channel);
 });
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<AuthenticationStateProvider, IdentityAuthenticationStateProvider>();
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthorizeApi>();
+
 
 await builder.Build().RunAsync();

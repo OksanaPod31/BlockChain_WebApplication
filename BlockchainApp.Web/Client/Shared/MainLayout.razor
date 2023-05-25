@@ -1,17 +1,39 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Nav
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+<AuthorizeView>
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
         </div>
 
-        <article class="content px-4 ">
-            @Body
-        </article>
-    </main>
-</div>
+        <main>
+            <div class="top-row px-4">
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
+
+            <article class="content px-4 ">
+                @Body
+            </article>
+        </main>
+    </div>
+</AuthorizeView>
+@code{
+    [CascadingParameter]
+    public Task<AuthenticationState> authenticationState { get; set; }
+
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var state = await authenticationState;
+        
+        
+        if (state.User.Identity is null)
+        {
+            Nav.NavigateTo("login");
+        }
+
+    }
+}
+

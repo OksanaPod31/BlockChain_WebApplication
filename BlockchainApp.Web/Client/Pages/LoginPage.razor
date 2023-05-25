@@ -1,0 +1,23 @@
+﻿@page "/login"
+@layout LoginLayout
+@inject AuthorizeApi aut
+@inject NavigationManager Nav
+
+<div style=" width: 60%; margin: 30vh auto">
+    <RadzenLogin Login="@OnLogin"></RadzenLogin>
+</div>
+
+
+@code {
+    private async Task OnLogin(LoginArgs args)
+    {
+        var login = args.Username;
+        var password = args.Password;
+
+        var success = await aut.Login(login, password);
+        if (success)
+        {
+            Nav.NavigateTo("/");
+        }
+    }
+}
