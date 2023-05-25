@@ -1,4 +1,5 @@
 ﻿using BlockchainApp.Domain.Common.Utils;
+using BlockchainApp.Domain.UserModels;
 using EllipticCurve;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace BlockchainApp.Domain.BlockchainModels
     {
         public int TransactionId { get; set; }
         public DateTime TimeStamp { get; set; }
-        public string Sender { set; get; }
+        public ChatUser Sender { set; get; }
         public string Recipient { set; get; }
         public string DataContent { set; get; }
         public List<Block> Blocks { set; get; }
 
-        public Transaction(DateTime timeStamp, string sender, string recipient, string dataContent)
+        public Transaction(DateTime timeStamp, ChatUser sender, string recipient, string dataContent)
         {
             TimeStamp = timeStamp;
             Sender = sender;

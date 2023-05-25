@@ -33,7 +33,7 @@ namespace BlockchainApp.Web.Shared
 
         public async Task AddMessageAsync(HelloReply message)
         {
-            var messagetranc = new Transaction { DataContent = message.Message, Recipient = "a", Sender = "admin", TimeStamp = DateTime.Now };
+            var messagetranc = new Transaction { DataContent = message.Message, Recipient = "a", Sender = new Domain.UserModels.ChatUser(), TimeStamp = DateTime.Now };
             Blockchain.AddTransactionToPool(messagetranc);
             //await context.Transactions.AddAsync(messagetranc);
             //await context.SaveChangesAsync();

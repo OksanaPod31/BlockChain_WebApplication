@@ -7,6 +7,9 @@ using Quartz;
 using BlockchainApp.Web.Server;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using System.ComponentModel.DataAnnotations;
+using BlockchainApp.Domain.UserModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,38 @@ builder.Services.AddGrpc();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<BlockchainDbContext>(options => options.UseSqlite(@"Data Source=Blockchain.db"), ServiceLifetime.Singleton);
+builder.Services.AddIdentity<ChatUser, IdentityRole>()
+	.AddEntityFrameworkStores<BlockchainDbContext>()
+	.AddDefaultTokenProviders();
+TokenParameters tokenParameters = new();
+builder.Services.AddSingleton(tokenParameters);
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+	.AddJwtBearer(options =>
+	{
+		options.RequireHttpsMetadata = true;
+		//options.SecurityTokenValidators.Add(new )
+	});
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	options.Password.RequireDigit = false;
+	options.Password.RequiredLength = 3;
+	options.Password.RequireLowercase = false;
+	options.Password.RequireUppercase = false;
+	options.Password.RequireNonAlphanumeric = false;
+});
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+	builder.AllowAnyOrigin()
+	.AllowAnyMethod()
+	.AllowAnyHeader()
+	.WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
+}));
+builder.Services.AddAuthorization();
+//TokenParameters tokenParameters = new();
 builder.Services.AddSingleton<ChatRoomManager>();
 builder.Services.AddQuartz(Quartz =>
 {
@@ -60,6 +95,9 @@ app.UseGrpcWeb();
 
 
 app.MapRazorPages();
+app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseAuthorization();
 //app.MapControllers();
 //app.MapFallbackToFile("index.html");
 app.UseEndpoints(endpoints =>

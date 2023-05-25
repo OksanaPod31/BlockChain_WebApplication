@@ -7,10 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Asn1.X509;
+using BlockchainApp.Domain.UserModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BlockchainApp.Persistence
 {
-    public class BlockchainDbContext : DbContext
+    public class BlockchainDbContext : IdentityDbContext<ChatUser>
     {
         public DbSet<Block> Bloks { get; set ; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -37,7 +39,7 @@ namespace BlockchainApp.Persistence
                     TransactionId = 1, 
                     DataContent = "", 
                     Recipient = "All", 
-                    Sender = "GenesisBlock", 
+                    Sender = new ChatUser(), 
                     TimeStamp = DateTime.Now
                 });
             });
