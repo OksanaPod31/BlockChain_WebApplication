@@ -16,6 +16,7 @@ namespace BlockchainApp.Persistence
     {
         public DbSet<Block> Bloks { get; set ; }
         public DbSet<Transaction> Transactions { get; set; }
+        
         public BlockchainDbContext(DbContextOptions<BlockchainDbContext> options):base(options)
         {
             Database.EnsureCreated();
@@ -39,10 +40,21 @@ namespace BlockchainApp.Persistence
                     TransactionId = 1, 
                     DataContent = "", 
                     Recipient = "All", 
-                    Sender = new ChatUser(), 
+                    SenderId = "1",
+                  
                     TimeStamp = DateTime.Now
                 });
             });
+            modelBuilder.Entity<ChatUser>(builder =>
+            {
+                builder.HasKey(x => x.Id);
+                builder.HasData(new ChatUser
+                {
+                    Id = "1"
+
+                });
+            });
+            base.OnModelCreating(modelBuilder);
         }
 
         

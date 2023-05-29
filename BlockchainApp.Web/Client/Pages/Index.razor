@@ -3,7 +3,7 @@
 
 @using Grpc.Core;
 
-@inject Greeter.GreeterClient greeterClient
+@inject Task<Greeter.GreeterClient> greeterClient
 
 <style>
     ::-webkit-scrollbar {
@@ -41,7 +41,7 @@
     private string mess;
     protected override async Task OnInitializedAsync()
     {
-        using var serverStream = greeterClient.JoinChat(new HelloRequest());
+        using var serverStream = (await greeterClient).JoinChat(new HelloRequest());
 
         var stream = serverStream.ResponseStream;
         await foreach(var message in stream.ReadAllAsync())
@@ -58,7 +58,7 @@
         if (string.IsNullOrEmpty(mess)) { return; }
 
         
-        await greeterClient.SendAsync(new HelloReply {Message = mess});
+        await (await greeterClient).SendAsync(new HelloReply {Message = mess});
     }
 
 }

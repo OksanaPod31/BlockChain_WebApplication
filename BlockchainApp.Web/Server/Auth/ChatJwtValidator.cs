@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace BlockchainApp.Web.Server
+namespace BlockchainApp.Web.Server.Auth
 {
     public class ChatJwtValidator : ISecurityTokenValidator
     {
@@ -45,7 +45,7 @@ namespace BlockchainApp.Web.Server
                 var claimsPrincipal = handler.ValidateToken(securityToken, tokenValidationParameters, out validatedToken);
                 return claimsPrincipal;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 validatedToken = new JwtSecurityToken();
                 return new ClaimsPrincipal();

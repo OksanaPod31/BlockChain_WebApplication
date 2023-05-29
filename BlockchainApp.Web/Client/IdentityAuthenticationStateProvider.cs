@@ -1,5 +1,8 @@
 ﻿using Blazored.LocalStorage;
+using BlockchainApp.Web.Client.Helpers;
+using BlockchainApp.Web.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System.Security.Claims;
 
 namespace BlockchainApp.Web.Client
@@ -7,28 +10,37 @@ namespace BlockchainApp.Web.Client
     public class IdentityAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService localStorageService;
+        private readonly Task<Account.AccountClient> accountClient;
 
-        public IdentityAuthenticationStateProvider(ILocalStorageService localStorageService)
+        public IdentityAuthenticationStateProvider(ILocalStorageService localStorageService, Task<Account.AccountClient> accountClient)
         {
             this.localStorageService = localStorageService;
+            
+            this.accountClient = accountClient;
         }
         public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var token = await localStorageService.GetItemAsStringAsync("token");
             if(!string.IsNullOrEmpty(token))
             {
-                var authUser = new ClaimsPrincipal(new ClaimsIdentity(
-                new List<Claim>() { new Claim(ClaimTypes.Name, "admin") }, "jwt"));
-                return new AuthenticationState(authUser);
+                try
+                {
+                    var authUser = await (await accountClient).GetUserProfileAsync(new UserInfoRequest());
+                    if (authUser.ResultCase == UserInfoResponse.ResultOneofCase.Profile)
+                        return Jwt.GetStateFromJwt(token);
+                }
+                catch(Exception ex) 
+                {
+                    Console.WriteLine(ex);
+                } 
+               
             }
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            return new (new ClaimsPrincipal(new ClaimsIdentity()));
         }
         public void MarkUserAsAuthenticated(string token)
         {
 
-            var authUser = new ClaimsPrincipal(new ClaimsIdentity(
-                new List<Claim>() { new Claim(ClaimTypes.Name, "admin") }, "jwt"));
-            var authState = Task.FromResult(new AuthenticationState(authUser));
+            var authState = Task.FromResult(Jwt.GetStateFromJwt(token));
             NotifyAuthenticationStateChanged(authState);
 
         }

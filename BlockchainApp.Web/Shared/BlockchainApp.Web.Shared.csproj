@@ -26,10 +26,9 @@
 
   <ItemGroup>
     <Protobuf Include="greet.proto" />
+    <Protobuf Include="account.proto" />
   </ItemGroup>
-	<ItemGroup>
-    <Protobuf Include="chatroom.proto" />
-  </ItemGroup>
+	
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />

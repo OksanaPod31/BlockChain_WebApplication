@@ -4,7 +4,8 @@
 @inject NavigationManager Nav
 
 <div style=" width: 60%; margin: 30vh auto">
-    <RadzenLogin Login="@OnLogin"></RadzenLogin>
+    <RadzenLogin Login="@OnLogin"
+        Register="@OnRegister"></RadzenLogin>
 </div>
 
 
@@ -20,4 +21,6 @@
             Nav.NavigateTo("/");
         }
     }
+
+    private void OnRegister() => Nav.NavigateTo("/register");
 }

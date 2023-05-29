@@ -104,8 +104,9 @@ app.UseEndpoints(endpoints =>
 {
 	// map to and register the gRPC service
 	endpoints.MapGrpcService<GreeterService>().EnableGrpcWeb();
-	endpoints.MapGrpcService<ChatRoomService>().EnableGrpcWeb();
-	endpoints.MapRazorPages();
+    endpoints.MapGrpcService<AccountService>().EnableGrpcWeb();
+
+    endpoints.MapRazorPages();
 	endpoints.MapControllers();
 	endpoints.MapFallbackToFile("index.html");
 });

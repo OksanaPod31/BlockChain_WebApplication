@@ -2,7 +2,7 @@
 using BlockchainApp.Domain.BlockchainModels;
 using BlockchainApp.Persistence;
 using Grpc.Core;
-
+using BlockchainApp.Web.Shared;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 

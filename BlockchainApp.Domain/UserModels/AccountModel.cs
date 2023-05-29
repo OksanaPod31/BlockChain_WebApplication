@@ -11,13 +11,13 @@ using EllipticCurve;
 
 namespace BlockchainApp.Domain.UserModels
 {
-    public class Account
+    public class AccountModel
     {
         public BigInteger SecretNumber { set; get; }
         public PrivateKey PrivKey { set; get; }
         public PublicKey PubKey { set; get; }
 
-        public Account(string screet = "")
+        public AccountModel(string screet = "")
         {
             if (screet != "")
             {

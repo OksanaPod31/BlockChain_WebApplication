@@ -6,13 +6,15 @@ package account;
 
 service Account{
 	rpc Login(LoginRequest) returns (LoginResponse);
-	rpc Register(RegisterRequest) returns(RegisterResponse);
+	rpc Register(RegisterRequest) returns(LoginResponse);
 	rpc GetUserProfile(UserInfoRequest) returns(UserInfoResponse);
 }
 
 message UserProfileInfo{
 	string username = 1;
 }
+
+message RegisterResponse {}
 
 message UserInfoRequest{
 

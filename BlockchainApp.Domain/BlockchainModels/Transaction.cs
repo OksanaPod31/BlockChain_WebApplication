@@ -3,6 +3,7 @@ using BlockchainApp.Domain.UserModels;
 using EllipticCurve;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,11 @@ namespace BlockchainApp.Domain.BlockchainModels
     {
         public int TransactionId { get; set; }
         public DateTime TimeStamp { get; set; }
+
+        
+        public string SenderId { get; set; }
+        
+        [ForeignKey("SenderId")]
         public ChatUser Sender { set; get; }
         public string Recipient { set; get; }
         public string DataContent { set; get; }
@@ -25,6 +31,7 @@ namespace BlockchainApp.Domain.BlockchainModels
             Recipient = recipient;
             DataContent = dataContent;
         }
+        
         public Transaction() { }
 
         public static bool VerifySignature(string publicKeyHex, string message, string signature)
