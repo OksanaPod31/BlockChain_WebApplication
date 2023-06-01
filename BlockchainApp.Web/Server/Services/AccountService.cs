@@ -8,6 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using BlockchainApp.Web.Server.Services;
+using Microsoft.AspNetCore.Http;
+using System.Security.Principal;
+using System.Data;
 
 namespace BlockchainApp.Web.Server
 {
@@ -19,6 +24,7 @@ namespace BlockchainApp.Web.Server
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ChatUser> _userManager;
         private readonly TokenParameters _tokenParameters;
+        
 
         #endregion
 
@@ -32,6 +38,7 @@ namespace BlockchainApp.Web.Server
             _roleManager = roleManager;
             _userManager = userManager;
             _tokenParameters = tokenParameters;
+            
         }
 
         #endregion
@@ -55,9 +62,14 @@ namespace BlockchainApp.Web.Server
             {
                 
                 var userIdentity = await _userManager.FindByNameAsync(user.UserName);
-                
+                //string[] roles = { "User", "Admin" };
+                var y = new GenericPrincipal(new GenericIdentity(userIdentity.UserName), new string[0]);
 
-                return TokenResponse(await userIdentity.GenerateJwtToken(_tokenParameters, _roleManager, _userManager));
+                context.GetHttpContext().User = y;
+
+                //context.GetHttpContext().User.AddIdentity(new ClaimsIdentity { Name = userIdentity.UserName});
+
+                return TokenResponse(await userIdentity.GenerateJwtToken(_tokenParameters, _roleManager, _userManager), userIdentity.UserName);
             }
 
             return new()
@@ -81,15 +93,25 @@ namespace BlockchainApp.Web.Server
 
             if (!isValidPassword)
                 return ErrorResponse("Password wrong");
+            //string[] roles = { "User", "Admin" };
 
-            return TokenResponse(await user.GenerateJwtToken(_tokenParameters, _roleManager, _userManager));
+
+            var y = new GenericPrincipal(new GenericIdentity(user.UserName), new string[0]);
+           
+            context.GetHttpContext().User = y;
+
+            return TokenResponse(await user.GenerateJwtToken(_tokenParameters, _roleManager, _userManager), request.Login);
         }
 
         [AllowAnonymous]
         public override async Task<UserInfoResponse> GetUserProfile(UserInfoRequest request, ServerCallContext context)
         {
-            var yy = context.GetHttpContext().User;
-            var user1 = await _userManager.FindByNameAsync(yy.Identity.Name);
+            //var y = new HttpContextAccessor().HttpContext.User;
+            //var t  = new HttpContextAccessor().HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            ////var t = new HttpContextAccessor().HttpContext.User.
+            //var yy = _userManager.GetUserAsync(new HttpContextAccessor().HttpContext.User);
+            //var yyu = yy.Result.UserName;
+            //var user1 = await _userManager.FindByNameAsync(yy.Identity.Name);
             var user = await _userManager.GetUserAsync(context.GetHttpContext().User);
 
             if (user == null)
@@ -123,13 +145,14 @@ namespace BlockchainApp.Web.Server
                 }
             };
 
-        private LoginResponse TokenResponse(string token) =>
+        private LoginResponse TokenResponse(string token, string name) =>
 
             new()
             {
                 Info = new LoginInfo
                 {
-                    Token = token
+                    Token = token,
+                    Username = name
                 }
             };
 

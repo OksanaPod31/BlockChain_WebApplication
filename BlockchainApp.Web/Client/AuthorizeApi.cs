@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using BlockchainApp.Domain.UserModels;
 using BlockchainApp.Web.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -9,6 +10,7 @@ namespace BlockchainApp.Web.Client
         private readonly ILocalStorageService _localStorageService;
         private IdentityAuthenticationStateProvider stateProvide;
         private readonly Task<Account.AccountClient> accountClient;
+        public ChatUser ChatUser { get; set; }
         public AuthorizeApi(AuthenticationStateProvider stateProvider, ILocalStorageService localStorageService, Task<Account.AccountClient> accountClient)
         {
             this.stateProvide = (IdentityAuthenticationStateProvider)stateProvider;
@@ -28,7 +30,9 @@ namespace BlockchainApp.Web.Client
                 if (tokenResponse.ResultCase == LoginResponse.ResultOneofCase.Info)
                 {
                     var token = tokenResponse.Info.Token;
+                    ChatUser = new ChatUser { UserName = tokenResponse.Info.Username };
                     Console.WriteLine(token);
+                    
                     await _localStorageService.SetItemAsync("token", token);
                     stateProvide.MarkUserAsAuthenticated(token);
 

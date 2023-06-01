@@ -4,6 +4,9 @@
 @using Grpc.Core;
 
 @inject Task<Greeter.GreeterClient> greeterClient
+@inject AuthorizeApi aut
+
+
 
 <style>
     ::-webkit-scrollbar {
@@ -39,16 +42,20 @@
 
     private List<string> _messages = new List<string>();
     private string mess;
+    private string name;
     protected override async Task OnInitializedAsync()
     {
+        name = aut.ChatUser.UserName;
         using var serverStream = (await greeterClient).JoinChat(new HelloRequest());
 
         var stream = serverStream.ResponseStream;
+
         await foreach(var message in stream.ReadAllAsync())
         {
             _messages.Add(message.Message);
             this.StateHasChanged();
         }
+        name = aut.ChatUser.UserName;
 
 
     }
@@ -58,7 +65,7 @@
         if (string.IsNullOrEmpty(mess)) { return; }
 
         
-        await (await greeterClient).SendAsync(new HelloReply {Message = mess});
+        await (await greeterClient).SendAsync(new HelloReply {Message = mess, Sender = name});
     }
 
 }

@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using BlockchainApp.Domain.UserModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BlockchainApp.Web.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,15 +55,17 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 builder.Services.AddAuthorization();
 //TokenParameters tokenParameters = new();
 builder.Services.AddSingleton<ChatRoomManager>();
-builder.Services.AddQuartz(Quartz =>
-{
-	Quartz.UseMicrosoftDependencyInjectionJobFactory();
-	var blockchainJobKey = new JobKey("BlockJob");
-	Quartz.AddJob<BlockJob>(opt => opt.WithIdentity(blockchainJobKey));
-	Quartz.AddTrigger(opt => opt.ForJob(blockchainJobKey).WithIdentity("BlockJob-trigger")
-	.WithSimpleSchedule(x => x.WithIntervalInSeconds(30).RepeatForever()));
-});
-builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+builder.Services.AddScoped<UserService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//builder.Services.AddQuartz(Quartz =>
+//{
+//	Quartz.UseMicrosoftDependencyInjectionJobFactory();
+//	var blockchainJobKey = new JobKey("BlockJob");
+//	Quartz.AddJob<BlockJob>(opt => opt.WithIdentity(blockchainJobKey));
+//	Quartz.AddTrigger(opt => opt.ForJob(blockchainJobKey).WithIdentity("BlockJob-trigger")
+//	.WithSimpleSchedule(x => x.WithIntervalInSeconds(30).RepeatForever()));
+//});
+//builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 
 

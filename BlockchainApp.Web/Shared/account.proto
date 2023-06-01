@@ -21,6 +21,7 @@ message UserInfoRequest{
 }
 message LoginInfo{
 	string token = 1;
+	string username = 2;
 }
 message Error{
 	string message = 1;

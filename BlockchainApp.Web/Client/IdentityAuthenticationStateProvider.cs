@@ -25,8 +25,8 @@ namespace BlockchainApp.Web.Client
             {
                 try
                 {
-                    var authUser = await (await accountClient).GetUserProfileAsync(new UserInfoRequest());
-                    if (authUser.ResultCase == UserInfoResponse.ResultOneofCase.Profile)
+                    //var authUser = await (await accountClient).GetUserProfileAsync(new UserInfoRequest());
+                    //if (authUser.ResultCase == UserInfoResponse.ResultOneofCase.Profile)
                         return Jwt.GetStateFromJwt(token);
                 }
                 catch(Exception ex) 
@@ -41,6 +41,7 @@ namespace BlockchainApp.Web.Client
         {
 
             var authState = Task.FromResult(Jwt.GetStateFromJwt(token));
+            
             NotifyAuthenticationStateChanged(authState);
 
         }
