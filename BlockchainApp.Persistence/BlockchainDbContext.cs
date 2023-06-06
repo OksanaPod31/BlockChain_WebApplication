@@ -38,7 +38,7 @@ namespace BlockchainApp.Persistence
                 builder.Property(x => x.TransactionId).ValueGeneratedOnAdd();
                 builder.HasData(new Transaction {
                     TransactionId = 1, 
-                    DataContent = "", 
+                    DataContent = "генезис блок", 
                     Recipient = "All", 
                     SenderId = "1",
                   
@@ -50,7 +50,8 @@ namespace BlockchainApp.Persistence
                 builder.HasKey(x => x.Id);
                 builder.HasData(new ChatUser
                 {
-                    Id = "1"
+                    Id = "1",
+                    UserName = "Genezis",
 
                 });
             });

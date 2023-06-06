@@ -59,6 +59,7 @@ namespace BlockchainApp.Web.Client
                 if(tokenResponse.ResultCase == LoginResponse.ResultOneofCase.Info)
                 {
                     var token = tokenResponse.Info.Token;
+                    ChatUser = new ChatUser { UserName= tokenResponse.Info.Username };
                     await _localStorageService.SetItemAsync("token", token);
                     stateProvide.MarkUserAsAuthenticated(token);
                     return true;

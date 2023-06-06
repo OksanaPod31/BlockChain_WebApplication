@@ -15,9 +15,21 @@ namespace BlockchainApp.Web.Server.Services
             return y.Id;
         }
 
+        private async Task<string> EntityUserName(string id)
+        {
+            var y = await userManager.FindByIdAsync(id);
+            return y.UserName;
+        }
+
         public string GetUserId(string name)
         {
             var t = EntityUser(name);
+            return t.Result;
+        }
+
+        public string GetUserNameById(string Id)
+        {
+            var t = EntityUserName(Id);
             return t.Result;
         }
 

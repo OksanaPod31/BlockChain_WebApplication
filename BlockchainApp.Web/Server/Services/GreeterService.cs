@@ -32,11 +32,11 @@ namespace BlockchainApp.Web.Shared
             this.userService = userService;
         }
 
-        private void ChatRoomService_MessageSended(string message)
+        private void ChatRoomService_MessageSended(string message, string sender)
         {
             foreach(var listener in _listeners)
             {
-                listener.WriteAsync(new HelloReply { Message = message });
+                listener.WriteAsync(new HelloReply { Message = message, Sender = sender });
             }
         }
 
@@ -53,7 +53,8 @@ namespace BlockchainApp.Web.Shared
         {
             foreach (var messagestrans in _chatRoomManager.GetMessages())
             {
-                await responsStream.WriteAsync(new HelloReply { Message = messagestrans.Message });
+                var y = userService.GetUserNameById(messagestrans.Sender);
+                await responsStream.WriteAsync(new HelloReply { Message = messagestrans.Message, Sender = y });
             }
             _listeners.Add(responsStream);
             while (!context.CancellationToken.IsCancellationRequested)

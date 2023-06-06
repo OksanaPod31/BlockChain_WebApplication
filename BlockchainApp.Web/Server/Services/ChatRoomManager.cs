@@ -19,7 +19,7 @@ namespace BlockchainApp.Web.Shared
     public class ChatRoomManager
     {
         private readonly BlockchainDbContext context;
-        public event Action<string> MessageSended;
+        public event Action<string, string> MessageSended;
         
         
         public ChatRoomManager(BlockchainDbContext context) { this.context = context; }
@@ -30,7 +30,7 @@ namespace BlockchainApp.Web.Shared
             List<HelloReply> messages = new List<HelloReply>();
             foreach (var message in context.Transactions)
             {
-                messages.Add(new HelloReply() { Message = message.DataContent });
+                messages.Add(new HelloReply() { Message = message.DataContent, Sender = message.SenderId });
                 //var reply = new HelloReply { Message = message.DataContent };
                 //rep.Append(reply);
             }
@@ -49,7 +49,7 @@ namespace BlockchainApp.Web.Shared
             //await context.Transactions.AddAsync(messagetranc);
             //await context.SaveChangesAsync();
 
-            MessageSended?.Invoke(message.Message);
+            MessageSended?.Invoke(message.Message, message.Sender);
         }
     }
 }
