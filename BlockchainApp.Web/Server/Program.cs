@@ -11,6 +11,7 @@ using BlockchainApp.Domain.UserModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BlockchainApp.Web.Server.Services;
+using BlockchainApp.Crypto.Signature;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +57,12 @@ builder.Services.AddAuthorization();
 //TokenParameters tokenParameters = new();
 builder.Services.AddSingleton<ChatRoomManager>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<SignatureService>();
+builder.Services.AddMemoryCache();
+//builder.Services.AddHttpContextAccessor();
+//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//builder.Services.AddScoped<HttpContextService>();
+
 //builder.Services.AddQuartz(Quartz =>
 //{
 //	Quartz.UseMicrosoftDependencyInjectionJobFactory();

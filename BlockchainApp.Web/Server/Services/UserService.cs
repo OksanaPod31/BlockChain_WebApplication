@@ -15,6 +15,12 @@ namespace BlockchainApp.Web.Server.Services
             return y.Id;
         }
 
+        private async Task<string> EntityUserPrivateKeyHex(string name)
+        {
+            var y = await userManager.FindByNameAsync(name);
+            return y.privateKey;
+        }
+
         private async Task<string> EntityUserName(string id)
         {
             var y = await userManager.FindByIdAsync(id);
@@ -31,6 +37,12 @@ namespace BlockchainApp.Web.Server.Services
         {
             var t = EntityUserName(Id);
             return t.Result;
+        }
+
+        public string GetUserPrivateKey(string name)
+        {
+            var t = EntityUserPrivateKeyHex(name);
+            return t.Result;    
         }
 
     }

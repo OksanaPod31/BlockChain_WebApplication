@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using BlockchainApp.Domain.UserModels;
 using BlockchainApp.Web.Server.Services;
+using BlockchainApp.Crypto.Signature;
+using EllipticCurve;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BlockchainApp.Web.Shared
 {
@@ -18,18 +21,29 @@ namespace BlockchainApp.Web.Shared
         private List<IServerStreamWriter<HelloReply>> _listeners = new List<IServerStreamWriter<HelloReply>>();
         private readonly UserManager<ChatUser> userManager;
         private readonly UserService userService;
+        private readonly SignatureService signatureService;
+        private readonly IMemoryCache _memoryCache;
+
         //private readonly BlockchainDbContext _context;
         //private readonly IBlockchainDbContext _context;
 
 
-        public GreeterService(ILogger<GreeterService> logger, ChatRoomManager context, UserManager<ChatUser> userManager, 
-            UserService userService)
+        public GreeterService(ILogger<GreeterService> logger, ChatRoomManager context, UserManager<ChatUser> userManager,
+            UserService userService, SignatureService signatureService, IMemoryCache _memoryCache)
         {
             _logger = logger;
             _chatRoomManager = context;
             _chatRoomManager.MessageSended += ChatRoomService_MessageSended;
             this.userManager = userManager;
             this.userService = userService;
+            this.signatureService = signatureService;
+            this._memoryCache = _memoryCache;
+            signatureService.PubKey = signatureService.GetPublicKeyFromHex((string)_memoryCache.Get("publicKey"));
+            signatureService.PrivKey = signatureService.GetPrivateKeyFromHex((string)_memoryCache.Get("privateKey"));
+
+            //httpContextAccessor.HttpContext.Items.TryGetValue("privatekey", out var privKey);
+            //signatureService.PubKey = (PublicKey)publKey;
+            //signatureService.PrivKey = signatureService.GetPrivateKeyFromHex((string)privKey);
         }
 
         private void ChatRoomService_MessageSended(string message, string sender)
@@ -94,7 +108,8 @@ namespace BlockchainApp.Web.Shared
             //var yy = context.GetHttpContext().User;
             //var tt = userManager.GetUserAsync(yy);
             var userId = userService.GetUserId(request.Sender);
-            await _chatRoomManager.AddMessageAsync(request, userId);
+            
+            await _chatRoomManager.VerifyMessage(signatureService.PubKey, signatureService.CreateSignature(request.Message), request, userId);
             //var messagetranc = new Transaction { DataContent = request.Message, Recipient="a", Sender="admin", TimeStamp= DateTime.Now.Ticks };
             //await _context.Transactions.AddAsync(messagetranc);
             //await _context.SaveChangesAsync();

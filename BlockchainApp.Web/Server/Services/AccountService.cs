@@ -13,6 +13,8 @@ using BlockchainApp.Web.Server.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Principal;
 using System.Data;
+using BlockchainApp.Crypto.Signature;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BlockchainApp.Web.Server
 {
@@ -24,6 +26,9 @@ namespace BlockchainApp.Web.Server
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ChatUser> _userManager;
         private readonly TokenParameters _tokenParameters;
+        private readonly SignatureService _signatureService;
+        private readonly IMemoryCache _memoryCache;
+        
         
 
         #endregion
@@ -33,11 +38,14 @@ namespace BlockchainApp.Web.Server
         public AccountService(
             RoleManager<IdentityRole> roleManager,
             UserManager<ChatUser> userManager,
-            TokenParameters tokenParameters)
+            TokenParameters tokenParameters, SignatureService signatureService, IMemoryCache memoryCache)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _tokenParameters = tokenParameters;
+            _signatureService = signatureService;
+            _memoryCache = memoryCache;
+           
             
         }
 
@@ -54,6 +62,8 @@ namespace BlockchainApp.Web.Server
             ChatUser user = new()
             {
                 UserName = request.Login,
+                publicKey = _signatureService.GetPubKeyHex(),
+                privateKey = _signatureService.GetPrivKeyHex(),
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -61,11 +71,12 @@ namespace BlockchainApp.Web.Server
             if (result.Succeeded)
             {
                 
-                var userIdentity = await _userManager.FindByNameAsync(user.UserName);
-                //string[] roles = { "User", "Admin" };
-                var y = new GenericPrincipal(new GenericIdentity(userIdentity.UserName), new string[0]);
 
-                context.GetHttpContext().User = y;
+                var userIdentity = await _userManager.FindByNameAsync(user.UserName);
+                _memoryCache.Set("privateKey", user.privateKey);
+                _memoryCache.Set("publicKey", user.publicKey);
+                //string[] roles = { "User", "Admin" };
+
 
                 //context.GetHttpContext().User.AddIdentity(new ClaimsIdentity { Name = userIdentity.UserName});
 
@@ -93,12 +104,21 @@ namespace BlockchainApp.Web.Server
 
             if (!isValidPassword)
                 return ErrorResponse("Password wrong");
+            _memoryCache.Set("privateKey", user.privateKey);
+            _memoryCache.Set("publicKey", user.publicKey);
+
+
+
             //string[] roles = { "User", "Admin" };
 
 
             var y = new GenericPrincipal(new GenericIdentity(user.UserName), new string[0]);
            
             context.GetHttpContext().User = y;
+            
+            //_httpContextAccessor.HttpContext.Items.Add("publickey", user.publicKey);
+            //_httpContextAccessor.HttpContext.Items.Add("privatekey", user.privateKey);
+            //var r = _httpContextAccessor.HttpContext.Items.ContainsKey("publickey");
 
             return TokenResponse(await user.GenerateJwtToken(_tokenParameters, _roleManager, _userManager), request.Login);
         }

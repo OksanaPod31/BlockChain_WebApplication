@@ -34,10 +34,10 @@ namespace BlockchainApp.Domain.BlockchainModels
         
         public Transaction() { }
 
-        public static bool VerifySignature(string publicKeyHex, string message, string signature)
+        public static bool VerifySignature(PublicKey publicKey, string message, string signature)
         {
-            var byt = Converter.ConvertHexStringToByteArray(publicKeyHex);
-            var publicKey = PublicKey.fromString(byt);
+            //var byt = Converter.ConvertHexStringToByteArray(publicKeyHex);
+            //var publicKey = PublicKey.fromString(byt);
             return Ecdsa.verify(message, Signature.fromBase64(signature), publicKey);
         }
 

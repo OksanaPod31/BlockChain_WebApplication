@@ -52,6 +52,8 @@ namespace BlockchainApp.Persistence
                 {
                     Id = "1",
                     UserName = "Genezis",
+                    privateKey = "undefined",
+                    publicKey = "undefined"
 
                 });
             });

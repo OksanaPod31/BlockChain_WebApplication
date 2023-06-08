@@ -2,6 +2,7 @@
 using BlockchainApp.Domain.UserModels;
 using BlockchainApp.Persistence;
 using BlockchainApp.Web.Server.Services;
+using EllipticCurve;
 using Grpc.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -45,11 +46,25 @@ namespace BlockchainApp.Web.Shared
             //var yy = userManager.GetUserAsync(context.GetHttpContext().User);
             
             var messagetranc = new Transaction { DataContent = message.Message, Recipient = "All", SenderId = userId, TimeStamp = DateTime.Now };
+
             Blockchain.AddTransactionToPool(messagetranc);
             //await context.Transactions.AddAsync(messagetranc);
             //await context.SaveChangesAsync();
 
             MessageSended?.Invoke(message.Message, message.Sender);
+        }
+
+        public async Task VerifyMessage(PublicKey publicKey, string signature, HelloReply helloReply, string userId)
+        {
+            if(Transaction.VerifySignature(publicKey, helloReply.Message, signature))
+            {
+                AddMessageAsync(helloReply, userId);
+            }
+            else
+            {
+                throw new Exception("Verify is fails");
+            }
+
         }
     }
 }
