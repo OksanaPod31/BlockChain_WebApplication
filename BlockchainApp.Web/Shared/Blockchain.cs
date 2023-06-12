@@ -46,29 +46,17 @@ namespace BlockchainApp.Web.Shared
             var trxPool = TransactionPool;
             var lastBlock = GetLastBlock(context);
 
-            if (trxPool.Count() <= 0)
+            if (trxPool.Count() > 0)
             {
-
-                var lstTrx = new List<Transaction>();
-                string tempTransactions = JsonConvert.SerializeObject(lstTrx);
-                var block = new Block(lastBlock, tempTransactions);
-                
-                await context.Bloks.AddAsync(block);
-                await context.SaveChangesAsync();
-
-            }
-            else
-            {
-               
                 string tempTransactions = JsonConvert.SerializeObject(trxPool);
 
                 var block = new Block(lastBlock, tempTransactions);
 
 
                 await context.Bloks.AddAsync(block);
-                
 
-                
+
+
                 foreach (Transaction trx in trxPool)
                 {
                     await context.Transactions.AddAsync(trx);
@@ -76,7 +64,34 @@ namespace BlockchainApp.Web.Shared
 
                 TransactionPool.Clear();
                 await context.SaveChangesAsync();
+                //var lstTrx = new List<Transaction>();
+                //string tempTransactions = JsonConvert.SerializeObject(lstTrx);
+                //var block = new Block(lastBlock, tempTransactions);
+
+                //await context.Bloks.AddAsync(block);
+                //await context.SaveChangesAsync();
+
             }
+            //else
+            //{
+               
+            //    string tempTransactions = JsonConvert.SerializeObject(trxPool);
+
+            //    var block = new Block(lastBlock, tempTransactions);
+
+
+            //    await context.Bloks.AddAsync(block);
+                
+
+                
+            //    foreach (Transaction trx in trxPool)
+            //    {
+            //        await context.Transactions.AddAsync(trx);
+            //    }
+
+            //    TransactionPool.Clear();
+            //    await context.SaveChangesAsync();
+            //}
 
         }
 

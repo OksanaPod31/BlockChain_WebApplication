@@ -5,6 +5,7 @@
 
 @inject Task<Greeter.GreeterClient> greeterClient
 @inject AuthorizeApi aut
+@inject IJSRuntime jsRuntime
 
 
 
@@ -43,12 +44,13 @@
                     @message.Sender
                 </p>
                 <h6>@message.Message</h6>
+                <RadzenIcon Icon="done" />
            </div>
         }
     }
 </div>
 <div style="display:flex; flex-direction: row; gap: 40px; justify-content: space-around; align-items: baseline">
-    <RadzenTextArea @bind-Value="mess" Placeholder="Enter here..." class="w-100" />
+    <RadzenTextArea @bind-Value="mess" Placeholder="Enter here..." class="w-100" id="myText" />
     @*<RadzenButton>Отправить</RadzenButton>*@
     <RadzenButton Click="SendMessageAsync" Icon="add" ButtonStyle="ButtonStyle.Primary"  Size="ButtonSize.Large" class="rz-border-radius-10 rz-shadow-10" />
 
@@ -69,6 +71,8 @@
 
         await foreach(var message in stream.ReadAllAsync())
         {
+            message.Message = await jsRuntime.InvokeAsync<string>("descryptMessage", message.Message);
+
             _messages.Add(message);
             this.StateHasChanged();
         }
@@ -80,6 +84,8 @@
     private async Task SendMessageAsync()
     {
         if (string.IsNullOrEmpty(mess)) { return; }
+        mess = await jsRuntime.InvokeAsync<string>("encryptMessage", mess);
+
 
         
         await (await greeterClient).SendAsync(new HelloReply {Message = mess, Sender = name});

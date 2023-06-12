@@ -23,6 +23,7 @@ builder.Services.AddGrpc();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<BlockchainDbContext>(options => options.UseSqlite(@"Data Source=Blockchain.db"), ServiceLifetime.Singleton);
+//builder.Services.AddDbContext<ServerKeysContext>(options => options.UseSqlite(@"Data Source=BlockchainKeys.db"), ServiceLifetime.Singleton);
 builder.Services.AddIdentity<ChatUser, IdentityRole>()
 	.AddEntityFrameworkStores<BlockchainDbContext>()
 	.AddDefaultTokenProviders();
@@ -63,15 +64,15 @@ builder.Services.AddMemoryCache();
 //builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 //builder.Services.AddScoped<HttpContextService>();
 
-//builder.Services.AddQuartz(Quartz =>
-//{
-//	Quartz.UseMicrosoftDependencyInjectionJobFactory();
-//	var blockchainJobKey = new JobKey("BlockJob");
-//	Quartz.AddJob<BlockJob>(opt => opt.WithIdentity(blockchainJobKey));
-//	Quartz.AddTrigger(opt => opt.ForJob(blockchainJobKey).WithIdentity("BlockJob-trigger")
-//	.WithSimpleSchedule(x => x.WithIntervalInSeconds(30).RepeatForever()));
-//});
-//builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+builder.Services.AddQuartz(Quartz =>
+{
+	Quartz.UseMicrosoftDependencyInjectionJobFactory();
+	var blockchainJobKey = new JobKey("BlockJob");
+	Quartz.AddJob<BlockJob>(opt => opt.WithIdentity(blockchainJobKey));
+	Quartz.AddTrigger(opt => opt.ForJob(blockchainJobKey).WithIdentity("BlockJob-trigger")
+	.WithSimpleSchedule(x => x.WithIntervalInSeconds(30).RepeatForever()));
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 
 
